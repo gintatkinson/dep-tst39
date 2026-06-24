@@ -34,9 +34,15 @@ issue_id: 107
 - **5b. Invalid geodetic-datum input (Branches from Basic Flow step 3):**
   1. The System detects the geodetic-datum value contains uppercase letters, spaces, or control characters.
   2. The System attempts to normalize the input (converting uppercase to lowercase and spaces to dashes). If invalid characters remain, it displays a validation error highlight on the geodetic-datum field and blocks the save action.
-- **5c. Invalid accuracy inputs (Branches from Basic Flow step 3):**
-  1. The System detects that coord-accuracy or height-accuracy has a negative value or has more than 6 decimal places.
-  2. The System displays a validation error highlight on the respective accuracy field and blocks the save action.
+- **5c. Invalid coord-accuracy input (Branches from Basic Flow step 3):**
+  1. The System detects that coord-accuracy has a negative value or has more than 6 decimal places.
+  2. The System displays a validation error highlight on the coord-accuracy field and blocks the save action.
+- **5d. Invalid height-accuracy input (Branches from Basic Flow step 3):**
+  1. The System detects that height-accuracy has a negative value or has more than 6 decimal places.
+  2. The System displays a validation error highlight on the height-accuracy field and blocks the save action.
+- **5e. Invalid alternate-system input (Branches from Basic Flow step 3):**
+  1. The System detects that the alternate-system URI is malformed or uses an unsupported scheme.
+  2. The System displays a validation error highlight on the alternate-system field and blocks the save action.
 
 ## 6. Postconditions
 - **Success Guarantee:** The node reference frame configuration is updated in the Network Inventory Database.
