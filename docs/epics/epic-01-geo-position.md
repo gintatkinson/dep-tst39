@@ -13,14 +13,17 @@ This Epic covers the Geolocation Position Management subsystem as defined in RFC
 
 ## 2. Requirements & Checklist
 - [ ] [#102 - Specify Location Coordinates](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/features/feat-01-geo-loc-coordinates.md) (Defines coordinates choices ellipsoid vs cartesian)
+- [ ] [#105 - Geographic Location Reference Frame](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/features/feat-02-reference-frame.md) (Defines spatial Reference Frame and geodetic system)
 
 ### Associated Use Cases & User Stories
 
 #### Associated Use Cases
 - [ ] [#104 - Update Node Location](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/use-cases/uc-01-update-node-location.md) (Standard operational use case for setting/changing coordinates)
+- [ ] [#107 - Configure Location Reference Frame](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/use-cases/uc-02-reference-frame.md) (Operational use case for configuring reference frame and geodetic datum)
 
 #### Associated User Stories
 - [ ] [#103 - Update Geolocation Coordinates](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/user-stories/us-01-update-coordinates.md) (Defines field-technician interaction with coordinates inputs)
+- [ ] [#106 - Configure Location Reference Frame](https://github.com/gintatkinson/digital-pipeline-repo/blob/main/docs/user-stories/us-02-reference-frame.md) (Defines field-technician interaction with reference frame inputs)
 ## 3. Architecture
 
 ## System-Level UML Class Diagram
@@ -30,6 +33,7 @@ classDiagram
         <<component>>
         +updateCoordinates(latitude : Decimal64, longitude : Decimal64, height : Decimal64) : Boolean [1]
         +updateCartesian(x : Decimal64, y : Decimal64, z : Decimal64) : Boolean [1]
+        +updateReferenceFrame(body : String, datum : String) : Boolean [1]
     }
     class GeoLocation {
         +Decimal64 latitude [0..1]
@@ -39,7 +43,18 @@ classDiagram
         +Decimal64 y [0..1]
         +Decimal64 z [0..1]
     }
+    class ReferenceFrame {
+        +String alternate-system [0..1]
+        +String astronomical-body [1]
+    }
+    class GeodeticSystem {
+        +String geodetic-datum [0..1]
+        +Decimal64 coord-accuracy [0..1]
+        +Decimal64 height-accuracy [0..1]
+    }
     GeopositionComponent *-- GeoLocation
+    GeopositionComponent *-- ReferenceFrame
+    ReferenceFrame *-- GeodeticSystem
 ```
 
 ## System State Machine Diagram
