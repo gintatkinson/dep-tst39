@@ -412,3 +412,16 @@ const _uiSchemaBindings = {
   'type geodetic-system': null,
   'type velocity': null
 };
+
+export const UI_SCHEMA_LEAF_MAPPINGS = [
+  'alternate-system:',
+  'astronomical-body:',
+  'coord-accuracy:',
+  'geodetic-datum:',
+  'height-accuracy:',
+  'v-east:',
+  'v-north:',
+  'v-up:',
+  'valid-until:'
+];
+

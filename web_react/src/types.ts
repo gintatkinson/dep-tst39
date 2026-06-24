@@ -229,3 +229,16 @@ export const SCHEMA_CONTAINERS = {
   'type geodetic-system': null,
   'type velocity': null
 };
+
+export const SCHEMA_LEAF_MAPPINGS = [
+  'alternate-system:',
+  'astronomical-body:',
+  'coord-accuracy:',
+  'geodetic-datum:',
+  'height-accuracy:',
+  'v-east:',
+  'v-north:',
+  'v-up:',
+  'valid-until:'
+];
+
