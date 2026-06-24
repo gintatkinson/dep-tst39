@@ -1033,12 +1033,12 @@ class _LayoutState extends State<Layout> {
             MediaQuery.of(context).platformBrightness == Brightness.dark);
     final themeData = ThemeData(
       brightness: isDark ? Brightness.dark : Brightness.light,
-      primaryColor: const Color(0xFF1A73E8),
-      scaffoldBackgroundColor: isDark ? const Color(0xFF121212) : Colors.white,
-      cardColor: isDark ? const Color(0xFF202124) : const Color(0xFFF1F3F4),
+      primaryColor: const Color.fromARGB(255, 26, 115, 232),
+      scaffoldBackgroundColor: isDark ? const Color.fromARGB(255, 18, 18, 18) : Colors.white,
+      cardColor: isDark ? const Color.fromARGB(255, 32, 33, 36) : const Color.fromARGB(255, 241, 243, 244),
       dividerColor: isDark ? const Color(0xFF3C4043) : const Color(0xFFDADCE0),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF1A73E8),
+        seedColor: const Color.fromARGB(255, 26, 115, 232),
         brightness: isDark ? Brightness.dark : Brightness.light,
       ),
     );

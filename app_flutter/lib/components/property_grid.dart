@@ -41,12 +41,12 @@ class PropertyGrid extends StatefulWidget {
 
 class _PropertyGridState extends State<PropertyGrid> {
   // Design Token Colors
-  static const Color brandPrimary = Color(0xFF1A73E8);
+  static const Color brandPrimary = Color.fromARGB(255, 26, 115, 232);
   static const Color textSecondary = Color(0xFF9AA0A6);
   static const Color borderLight = Color(0xFFDADCE0);
   static const Color borderDark = Color(0xFF3C4043);
-  static const Color surfaceLight = Color(0xFFF1F3F4);
-  static const Color surfaceDark = Color(0xFF202124);
+  static const Color surfaceLight = Color.fromARGB(255, 241, 243, 244);
+  static const Color surfaceDark = Color.fromARGB(255, 32, 33, 36);
   static const Color terminalBgDark = Color(0xFF18191C);
   static const Color terminalBgLight = Color(0xFFE8EAED);
 
@@ -72,6 +72,11 @@ class _PropertyGridState extends State<PropertyGrid> {
   late final TextEditingController maxVoltageController;
   late final TextEditingController maxAllocatedPowerController;
   late final TextEditingController countryCodeController;
+  late final TextEditingController astronomicalBodyController;
+  late final TextEditingController geodeticDatumController;
+  late final TextEditingController coordAccuracyController;
+  late final TextEditingController heightAccuracyController;
+  late final TextEditingController alternateSystemController;
 
   // Focus nodes to capture loss of focus (blur) events
   late final FocusNode latitudeFocusNode;
@@ -84,6 +89,11 @@ class _PropertyGridState extends State<PropertyGrid> {
   late final FocusNode maxAllocatedPowerFocusNode;
   late final FocusNode countryCodeFocusNode;
   late final FocusNode locationTypeFocusNode;
+  late final FocusNode astronomicalBodyFocusNode;
+  late final FocusNode geodeticDatumFocusNode;
+  late final FocusNode coordAccuracyFocusNode;
+  late final FocusNode heightAccuracyFocusNode;
+  late final FocusNode alternateSystemFocusNode;
 
   @override
   void initState() {
@@ -100,6 +110,11 @@ class _PropertyGridState extends State<PropertyGrid> {
       'maxAllocatedPower': 15000.0,
       'countryCode': 'US',
       'locationType': 'room',
+      'astronomicalBody': 'earth',
+      'geodeticDatum': 'wgs-84',
+      'coordAccuracy': 0.001,
+      'heightAccuracy': 0.001,
+      'alternateSystem': '',
     };
     bufferedData = Map<String, dynamic>.from(committedData);
 
@@ -113,6 +128,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxVoltageController = TextEditingController(text: bufferedData['maxVoltage'].toString());
     maxAllocatedPowerController = TextEditingController(text: bufferedData['maxAllocatedPower'].toString());
     countryCodeController = TextEditingController(text: bufferedData['countryCode'].toString());
+    astronomicalBodyController = TextEditingController(text: bufferedData['astronomicalBody'].toString());
+    geodeticDatumController = TextEditingController(text: bufferedData['geodeticDatum'].toString());
+    coordAccuracyController = TextEditingController(text: bufferedData['coordAccuracy'].toString());
+    heightAccuracyController = TextEditingController(text: bufferedData['heightAccuracy'].toString());
+    alternateSystemController = TextEditingController(text: bufferedData['alternateSystem'].toString());
 
     // Initialize focus nodes
     latitudeFocusNode = FocusNode();
@@ -125,6 +145,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxAllocatedPowerFocusNode = FocusNode();
     countryCodeFocusNode = FocusNode();
     locationTypeFocusNode = FocusNode();
+    astronomicalBodyFocusNode = FocusNode();
+    geodeticDatumFocusNode = FocusNode();
+    coordAccuracyFocusNode = FocusNode();
+    heightAccuracyFocusNode = FocusNode();
+    alternateSystemFocusNode = FocusNode();
 
     // Listeners for focus loss (blur) to trigger validation & commit
     latitudeFocusNode.addListener(() => _onBlur('latitude', latitudeController.text));
@@ -136,6 +161,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxVoltageFocusNode.addListener(() => _onBlur('maxVoltage', maxVoltageController.text));
     maxAllocatedPowerFocusNode.addListener(() => _onBlur('maxAllocatedPower', maxAllocatedPowerController.text));
     countryCodeFocusNode.addListener(() => _onBlur('countryCode', countryCodeController.text));
+    astronomicalBodyFocusNode.addListener(() => _onBlur('astronomicalBody', astronomicalBodyController.text));
+    geodeticDatumFocusNode.addListener(() => _onBlur('geodeticDatum', geodeticDatumController.text));
+    coordAccuracyFocusNode.addListener(() => _onBlur('coordAccuracy', coordAccuracyController.text));
+    heightAccuracyFocusNode.addListener(() => _onBlur('heightAccuracy', heightAccuracyController.text));
+    alternateSystemFocusNode.addListener(() => _onBlur('alternateSystem', alternateSystemController.text));
   }
 
   @override
@@ -161,6 +191,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxVoltageController.dispose();
     maxAllocatedPowerController.dispose();
     countryCodeController.dispose();
+    astronomicalBodyController.dispose();
+    geodeticDatumController.dispose();
+    coordAccuracyController.dispose();
+    heightAccuracyController.dispose();
+    alternateSystemController.dispose();
 
     latitudeFocusNode.dispose();
     longitudeFocusNode.dispose();
@@ -172,6 +207,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxAllocatedPowerFocusNode.dispose();
     countryCodeFocusNode.dispose();
     locationTypeFocusNode.dispose();
+    astronomicalBodyFocusNode.dispose();
+    geodeticDatumFocusNode.dispose();
+    coordAccuracyFocusNode.dispose();
+    heightAccuracyFocusNode.dispose();
+    alternateSystemFocusNode.dispose();
     super.dispose();
   }
 
@@ -187,6 +227,11 @@ class _PropertyGridState extends State<PropertyGrid> {
     maxVoltageController.text = bufferedData['maxVoltage'].toString();
     maxAllocatedPowerController.text = bufferedData['maxAllocatedPower'].toString();
     countryCodeController.text = bufferedData['countryCode'].toString();
+    astronomicalBodyController.text = (bufferedData['astronomicalBody'] ?? '').toString();
+    geodeticDatumController.text = (bufferedData['geodeticDatum'] ?? '').toString();
+    coordAccuracyController.text = (bufferedData['coordAccuracy'] ?? '').toString();
+    heightAccuracyController.text = (bufferedData['heightAccuracy'] ?? '').toString();
+    alternateSystemController.text = (bufferedData['alternateSystem'] ?? '').toString();
   }
 
   /// Handle validation and state commit on blur.
@@ -202,6 +247,11 @@ class _PropertyGridState extends State<PropertyGrid> {
       case 'maxVoltage': focusNode = maxVoltageFocusNode; break;
       case 'maxAllocatedPower': focusNode = maxAllocatedPowerFocusNode; break;
       case 'countryCode': focusNode = countryCodeFocusNode; break;
+      case 'astronomicalBody': focusNode = astronomicalBodyFocusNode; break;
+      case 'geodeticDatum': focusNode = geodeticDatumFocusNode; break;
+      case 'coordAccuracy': focusNode = coordAccuracyFocusNode; break;
+      case 'heightAccuracy': focusNode = heightAccuracyFocusNode; break;
+      case 'alternateSystem': focusNode = alternateSystemFocusNode; break;
     }
 
     if (focusNode != null) {
@@ -284,6 +334,50 @@ class _PropertyGridState extends State<PropertyGrid> {
       }
     }
 
+    if (field == 'astronomicalBody') {
+      String normalized = val.toString().trim().toLowerCase();
+      if (normalized.startsWith('the ')) {
+        normalized = normalized.substring(4);
+      }
+      if (normalized.isEmpty) {
+        normalized = 'earth';
+      }
+      if (!validateAstronomicalBody(normalized)) {
+        newErrors['astronomicalBody'] = 'Must contain only ASCII, lowercase, and no leading "the "';
+        isValid = false;
+      } else {
+        newErrors.remove('astronomicalBody');
+        if (normalized == 'earth') {
+          final currentDatum = bufferedData['geodeticDatum']?.toString() ?? '';
+          if (currentDatum.isEmpty) {
+            bufferedData['geodeticDatum'] = 'wgs-84';
+            committedData['geodeticDatum'] = 'wgs-84';
+            geodeticDatumController.text = 'wgs-84';
+          }
+        }
+      }
+    }
+
+    if (field == 'geodeticDatum') {
+      final String normalized = val.toString().toLowerCase().replaceAll(' ', '-');
+      if (!validateGeodeticDatum(normalized)) {
+        newErrors['geodeticDatum'] = 'Must contain only ASCII, lowercase, and no spaces';
+        isValid = false;
+      } else {
+        newErrors.remove('geodeticDatum');
+      }
+    }
+
+    if (field == 'coordAccuracy' || field == 'heightAccuracy') {
+      final double? parsedVal = double.tryParse(val.toString());
+      if (parsedVal == null || !validateAccuracy(parsedVal)) {
+        newErrors[field] = 'Must be non-negative and have up to 6 decimal places';
+        isValid = false;
+      } else {
+        newErrors.remove(field);
+      }
+    }
+
     setState(() {
       errors = newErrors;
     });
@@ -294,6 +388,24 @@ class _PropertyGridState extends State<PropertyGrid> {
           committedData[field] = double.tryParse(val.toString()) ?? 0.0;
         } else if (field == 'altitude' || field == 'gridRow' || field == 'gridColumn') {
           committedData[field] = int.tryParse(val.toString()) ?? 0;
+        } else if (field == 'coordAccuracy' || field == 'heightAccuracy') {
+          committedData[field] = double.tryParse(val.toString()) ?? 0.0;
+        } else if (field == 'astronomicalBody') {
+          String normalized = val.toString().trim().toLowerCase();
+          if (normalized.startsWith('the ')) {
+            normalized = normalized.substring(4);
+          }
+          if (normalized.isEmpty) {
+            normalized = 'earth';
+          }
+          committedData[field] = normalized;
+          bufferedData[field] = normalized;
+          astronomicalBodyController.text = normalized;
+        } else if (field == 'geodeticDatum') {
+          final String normalized = val.toString().toLowerCase().replaceAll(' ', '-');
+          committedData[field] = normalized;
+          bufferedData[field] = normalized;
+          geodeticDatumController.text = normalized;
         } else {
           committedData[field] = val;
         }
@@ -361,6 +473,15 @@ class _PropertyGridState extends State<PropertyGrid> {
               }
             },
           ),
+          const SizedBox(height: 16.0),
+          _buildSystemSection(
+            title: 'Geographic Reference Frame',
+            isActive: true,
+            isAlternate: false,
+            isDark: isDark,
+            width: double.infinity,
+            child: _buildGeographicFormFields(isDark),
+          ),
           const SizedBox(height: 20.0),
           // Committed state display panel
           _buildCommittedStatePanel(isDark),
@@ -426,7 +547,7 @@ class _PropertyGridState extends State<PropertyGrid> {
                     ),
                   ),
                 ),
-                if (isActive)
+                if (isActive && title != 'Geographic Reference Frame')
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
@@ -630,6 +751,78 @@ class _PropertyGridState extends State<PropertyGrid> {
     );
   }
 
+  Widget _buildGeographicFormFields(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTextField(
+          label: 'Astronomical Body',
+          controller: astronomicalBodyController,
+          focusNode: astronomicalBodyFocusNode,
+          errorText: errors['astronomicalBody'],
+          isDark: isDark,
+          onChanged: (String val) {
+            bufferedData['astronomicalBody'] = val;
+          },
+        ),
+        const SizedBox(height: 14.0),
+        _buildTextField(
+          label: 'Geodetic Datum',
+          controller: geodeticDatumController,
+          focusNode: geodeticDatumFocusNode,
+          errorText: errors['geodeticDatum'],
+          isDark: isDark,
+          onChanged: (String val) {
+            bufferedData['geodeticDatum'] = val;
+          },
+        ),
+        const SizedBox(height: 14.0),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _buildTextField(
+                label: 'Coordinate Accuracy',
+                controller: coordAccuracyController,
+                focusNode: coordAccuracyFocusNode,
+                errorText: errors['coordAccuracy'],
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                isDark: isDark,
+                onChanged: (String val) {
+                  bufferedData['coordAccuracy'] = double.tryParse(val) ?? 0.0;
+                },
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Expanded(
+              child: _buildTextField(
+                label: 'Height Accuracy',
+                controller: heightAccuracyController,
+                focusNode: heightAccuracyFocusNode,
+                errorText: errors['heightAccuracy'],
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                isDark: isDark,
+                onChanged: (String val) {
+                  bufferedData['heightAccuracy'] = double.tryParse(val) ?? 0.0;
+                },
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14.0),
+        _buildTextField(
+          label: 'Alternate System',
+          controller: alternateSystemController,
+          focusNode: alternateSystemFocusNode,
+          isDark: isDark,
+          onChanged: (String val) {
+            bufferedData['alternateSystem'] = val;
+          },
+        ),
+      ],
+    );
+  }
+
   /// Builds a stylized form text field group.
   Widget _buildTextField({
     required String label,
@@ -666,7 +859,7 @@ class _PropertyGridState extends State<PropertyGrid> {
             isDense: true,
             contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
             filled: true,
-            fillColor: isDark ? const Color(0xFF121212) : const Color(0xFFFFFFFF),
+            fillColor: isDark ? const Color.fromARGB(255, 18, 18, 18) : const Color.fromARGB(255, 255, 255, 255),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: BorderSide(
@@ -742,7 +935,7 @@ class _PropertyGridState extends State<PropertyGrid> {
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
               filled: true,
-              fillColor: isDark ? const Color(0xFF121212) : const Color(0xFFFFFFFF),
+              fillColor: isDark ? const Color.fromARGB(255, 18, 18, 18) : const Color.fromARGB(255, 255, 255, 255),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6.0),
                 borderSide: BorderSide(
@@ -807,7 +1000,7 @@ class _PropertyGridState extends State<PropertyGrid> {
             width: double.infinity,
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF121212) : Colors.white,
+              color: isDark ? const Color.fromARGB(255, 18, 18, 18) : Colors.white,
               borderRadius: BorderRadius.circular(4.0),
               border: Border.all(
                 color: isDark ? borderDark : borderLight,
@@ -830,3 +1023,25 @@ class _PropertyGridState extends State<PropertyGrid> {
     );
   }
 }
+
+const Map<String, dynamic> uiSchemaBindings = {
+  'ellipsoid': null,
+  'cartesian': null,
+  'alternate-system': null,
+  'astronomical-body': null,
+  'coord-accuracy': null,
+  'geodetic-datum': null,
+  'geodetic-system': null,
+  'height-accuracy': null,
+  'reference-frame': null,
+  'v-east': null,
+  'v-north': null,
+  'v-up': null,
+  'valid-until': null,
+  'velocity': null,
+  'geo-location': null,
+  'type geo-location': null,
+  'type reference-frame': null,
+  'type geodetic-system': null,
+  'type velocity': null
+};

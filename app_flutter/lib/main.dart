@@ -35,24 +35,24 @@ class _MyAppState extends State<MyApp> {
     // Configure theme data for Light, Dark, and System modes matching the design tokens
     final ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,
-      primaryColor: const Color(0xFF1A73E8),
+      primaryColor: const Color.fromARGB(255, 26, 115, 232),
       scaffoldBackgroundColor: Colors.white,
-      cardColor: const Color(0xFFF1F3F4),
+      cardColor: const Color.fromARGB(255, 241, 243, 244),
       dividerColor: const Color(0xFFDADCE0),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF1A73E8),
+        seedColor: const Color.fromARGB(255, 26, 115, 232),
         brightness: Brightness.light,
       ),
     );
 
     final ThemeData darkTheme = ThemeData(
       brightness: Brightness.dark,
-      primaryColor: const Color(0xFF1A73E8),
-      scaffoldBackgroundColor: const Color(0xFF121212),
-      cardColor: const Color(0xFF202124),
+      primaryColor: const Color.fromARGB(255, 26, 115, 232),
+      scaffoldBackgroundColor: const Color.fromARGB(255, 18, 18, 18),
+      cardColor: const Color.fromARGB(255, 32, 33, 36),
       dividerColor: const Color(0xFF3C4043),
       colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF1A73E8),
+        seedColor: const Color.fromARGB(255, 26, 115, 232),
         brightness: Brightness.dark,
       ),
     );

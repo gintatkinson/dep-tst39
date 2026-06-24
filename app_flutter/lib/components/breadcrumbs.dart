@@ -70,12 +70,12 @@ class _NavigationBreadcrumbsState extends State<NavigationBreadcrumbs> {
     // Design Token Colors
     // Blue-500: #1a73e8 (brand primary accent)
     // Blue-600: #1557b0 (brand primary hover)
-    const Color brandPrimary = Color(0xFF1A73E8);
+    const Color brandPrimary = Color.fromARGB(255, 26, 115, 232);
     const Color textSecondary = Color(0xFF9AA0A6);
     const Color separatorColor = Color(0xFF666666);
 
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color currentTextColor = isDark ? const Color(0xFFEEEEEE) : const Color(0xFF202124);
+    final Color currentTextColor = isDark ? const Color(0xFFEEEEEE) : const Color.fromARGB(255, 32, 33, 36);
 
     final List<Widget> children = <Widget>[];
     for (int i = 0; i < renderedItems.length; i++) {
