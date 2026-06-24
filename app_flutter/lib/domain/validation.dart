@@ -90,7 +90,7 @@ bool validateAstronomicalBody(String body) {
 /// does not contain spaces, and is fully lowercase.
 bool validateGeodeticDatum(String datum) {
   if (datum.isEmpty) {
-    return false;
+    return true;
   }
   if (datum.contains(' ')) {
     return false;

@@ -543,7 +543,7 @@ class _PropertyGridState extends State<PropertyGrid> {
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.w600,
-                      color: isDark ? const Color(0xFFEEEEEE) : const Color(0xFF202124),
+                      color: isDark ? const Color(0xFFEEEEEE) : const Color.fromARGB(255, 32, 33, 36),
                     ),
                   ),
                 ),
@@ -853,7 +853,7 @@ class _PropertyGridState extends State<PropertyGrid> {
           inputFormatters: inputFormatters,
           style: TextStyle(
             fontSize: 13.0,
-            color: isDark ? const Color(0xFFEEEEEE) : const Color(0xFF202124),
+            color: isDark ? const Color(0xFFEEEEEE) : const Color.fromARGB(255, 32, 33, 36),
           ),
           decoration: InputDecoration(
             isDense: true,
@@ -929,7 +929,7 @@ class _PropertyGridState extends State<PropertyGrid> {
             dropdownColor: isDark ? surfaceDark : Colors.white,
             style: TextStyle(
               fontSize: 13.0,
-              color: isDark ? const Color(0xFFEEEEEE) : const Color(0xFF202124),
+              color: isDark ? const Color(0xFFEEEEEE) : const Color.fromARGB(255, 32, 33, 36),
             ),
             decoration: InputDecoration(
               isDense: true,
@@ -992,7 +992,7 @@ class _PropertyGridState extends State<PropertyGrid> {
             style: TextStyle(
               fontSize: 12.0,
               fontWeight: FontWeight.w600,
-              color: isDark ? const Color(0xFFEEEEEE) : const Color(0xFF202124),
+              color: isDark ? const Color(0xFFEEEEEE) : const Color.fromARGB(255, 32, 33, 36),
             ),
           ),
           const SizedBox(height: 10.0),

@@ -236,4 +236,186 @@ void main() {
     expect(find.text("Must be 'site', 'room', or 'building'"), findsNothing);
     expect(savedData!['locationType'], 'site');
   });
+
+  testWidgets('renders Geographic Reference Frame section with default values', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: PropertyGrid(activeView: 'Location'),
+        ),
+      ),
+    );
+
+    expect(find.text('Geographic Reference Frame'), findsOneWidget);
+    expect(findTextFieldByLabel('Astronomical Body'), findsOneWidget);
+    expect(findTextFieldByLabel('Geodetic Datum'), findsOneWidget);
+    expect(findTextFieldByLabel('Coordinate Accuracy'), findsOneWidget);
+    expect(findTextFieldByLabel('Height Accuracy'), findsOneWidget);
+    expect(findTextFieldByLabel('Alternate System'), findsOneWidget);
+
+    // Verify initial values in TextFields
+    expect(tester.widget<TextField>(findTextFieldByLabel('Astronomical Body')).controller?.text, 'earth');
+    expect(tester.widget<TextField>(findTextFieldByLabel('Geodetic Datum')).controller?.text, 'wgs-84');
+    expect(tester.widget<TextField>(findTextFieldByLabel('Coordinate Accuracy')).controller?.text, '0.001');
+    expect(tester.widget<TextField>(findTextFieldByLabel('Height Accuracy')).controller?.text, '0.001');
+    expect(tester.widget<TextField>(findTextFieldByLabel('Alternate System')).controller?.text, '');
+  });
+
+  testWidgets('buffers new fields locally and only commits on focus loss (blur)', (WidgetTester tester) async {
+    Map<String, dynamic>? savedData;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PropertyGrid(
+            activeView: 'Location',
+            onSave: (data) {
+              savedData = data;
+            },
+          ),
+        ),
+      ),
+    );
+
+    final Finder astroField = findTextFieldByLabel('Astronomical Body');
+
+    // Type a new value "jupiter"
+    await tester.enterText(astroField, 'jupiter');
+    await tester.pumpAndSettle();
+
+    // Verify it has not committed yet
+    expect(savedData, isNull);
+
+    // Lose focus
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+
+    // Verify state committed and onSave triggered
+    expect(savedData, isNotNull);
+    expect(savedData!['astronomicalBody'], 'jupiter');
+  });
+
+  testWidgets('Astronomical Body normalizes input and defaults datum to wgs-84 for earth', (WidgetTester tester) async {
+    Map<String, dynamic>? savedData;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PropertyGrid(
+            activeView: 'Location',
+            onSave: (data) {
+              savedData = data;
+            },
+          ),
+        ),
+      ),
+    );
+
+    final Finder astroField = findTextFieldByLabel('Astronomical Body');
+    final Finder datumField = findTextFieldByLabel('Geodetic Datum');
+
+    // 1. Enter "The Mars" and verify it normalizes to "mars"
+    await tester.enterText(astroField, 'The Mars');
+    await tester.pumpAndSettle();
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(savedData!['astronomicalBody'], 'mars');
+    expect(tester.widget<TextField>(astroField).controller?.text, 'mars');
+
+    // 2. Clear Geodetic Datum to verify defaulting to "wgs-84" when Astronomical Body becomes "earth"
+    await tester.enterText(datumField, '');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(savedData!['geodeticDatum'], '');
+
+    // Now set Astronomical Body to "earth"
+    await tester.enterText(astroField, 'earth');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(savedData!['astronomicalBody'], 'earth');
+    expect(savedData!['geodeticDatum'], 'wgs-84');
+    expect(tester.widget<TextField>(datumField).controller?.text, 'wgs-84');
+  });
+
+  testWidgets('displays validation error messages for invalid inputs', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: PropertyGrid(activeView: 'Location'),
+        ),
+      ),
+    );
+
+    final Finder astroField = findTextFieldByLabel('Astronomical Body');
+    final Finder datumField = findTextFieldByLabel('Geodetic Datum');
+    final Finder coordAccField = findTextFieldByLabel('Coordinate Accuracy');
+    final Finder heightAccField = findTextFieldByLabel('Height Accuracy');
+
+    // 1. Invalid Astronomical Body (emoji)
+    await tester.enterText(astroField, '🌍');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(find.text('Must contain only ASCII, lowercase, and no leading "the "'), findsOneWidget);
+
+    // 2. Invalid Geodetic Datum (emoji)
+    await tester.enterText(datumField, '🌍');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(find.text('Must contain only ASCII, lowercase, and no spaces'), findsOneWidget);
+
+    // 3. Invalid Coordinate Accuracy (negative)
+    await tester.enterText(coordAccField, '-0.001');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(find.text('Must be non-negative and have up to 6 decimal places'), findsOneWidget);
+
+    // Clear Coordinate Accuracy error
+    await tester.enterText(coordAccField, '0.001');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(find.text('Must be non-negative and have up to 6 decimal places'), findsNothing);
+
+    // 4. Invalid Height Accuracy (too many decimals)
+    await tester.enterText(heightAccField, '0.1234567');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    expect(find.text('Must be non-negative and have up to 6 decimal places'), findsOneWidget);
+  });
+
+  testWidgets('Geodetic Datum normalizes input by replacing spaces with dashes', (WidgetTester tester) async {
+    Map<String, dynamic>? savedData;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: PropertyGrid(
+            activeView: 'Location',
+            onSave: (data) {
+              savedData = data;
+            },
+          ),
+        ),
+      ),
+    );
+
+    final Finder datumField = findTextFieldByLabel('Geodetic Datum');
+
+    await tester.enterText(datumField, 'WGS 84');
+    await tester.pumpAndSettle();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+
+    expect(savedData!['geodeticDatum'], 'wgs-84');
+    expect(tester.widget<TextField>(datumField).controller?.text, 'wgs-84');
+  });
 }

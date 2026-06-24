@@ -370,10 +370,10 @@ class GeodeticSystem {
     return GeodeticSystem(
       geodeticDatum: (json['geodeticDatum'] ?? json['geodetic-datum']) as String?,
       coordAccuracy: (json['coordAccuracy'] ?? json['coord-accuracy']) != null
-          ? (json['coordAccuracy'] ?? json['coord-accuracy'] as num).toDouble()
+          ? ((json['coordAccuracy'] ?? json['coord-accuracy']) as num).toDouble()
           : null,
       heightAccuracy: (json['heightAccuracy'] ?? json['height-accuracy']) != null
-          ? (json['heightAccuracy'] ?? json['height-accuracy'] as num).toDouble()
+          ? ((json['heightAccuracy'] ?? json['height-accuracy']) as num).toDouble()
           : null,
     );
   }
